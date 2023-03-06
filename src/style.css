@@ -1,0 +1,17 @@
+body {
+    margin: 0px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: purple;
+    color: white;
+    padding: 20px;
+}
+
+.header-Title {
+    display: flex;
+    gap: 10px;
+}
