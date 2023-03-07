@@ -2,20 +2,59 @@ import image from '../assets/image.png'
 import memeData from './memeData';
 import React from 'react';
 
-export default function Form() {
-    const [meme, setMeme] = React.useState('')
+/**
+   * Challenge: Update our state to save the meme-related
+   * data as an object called `meme`. It should have the
+   * following 3 properties:
+   * topText, bottomText, randomImage.
+   * 
+   * The 2 text states can default to empty strings for now,
+   * amd randomImage should default to "http://i.imgflip.com/1bij.jpg"
+   * 
+   * Next, create a new state variable called `allMemeImages`
+   * which will default to `memesData`, which we imported above
+   * 
+   * Lastly, update the `getMemeImage` function and the markup 
+   * to reflect our newly reformed state object and array in the
+   * correct way.
+   */
 
-    function RandomImage() {
-        const memeImageArray = memeData.data.memes;
+
+export default function Form() {
+    // const [meme, setMeme] = React.useState('http://i.imgflip.com/1bij.jpg')
+
+    const [meme, setMeme] = React.useState({
+        firstText: '',
+        secondText: '',
+        url: 'http://i.imgflip.com/1bij.jpg'
+    })
+
+    const [memeImage, SetMemeImage] = React.useState(memeData);
+
+    function randomMemeImages() {
+        const memeImageArray = memeImage.data.memes;
+        // const memeImageArray = memeData.data.memes;
         const randomMemeImage = memeImageArray[Math.floor(Math.random() * memeImageArray.length)].url
-        return (randomMemeImage);
+        console.log(randomMemeImage)
+        return randomMemeImage
     }
 
+    function generateMeme() {
+        setMeme(prevMeme => {
+            return (
+                {
+                    ...prevMeme,
+                    url: randomMemeImages()
+                }
+            )
+        })
+    }
 
     function handleGetMeme(e) {
         console.log('Clicked')
         e.preventDefault();
-        setMeme(RandomImage)
+        generateMeme()
+
     }
 
     return (
@@ -30,34 +69,10 @@ export default function Form() {
             </form>
 
             <div className='displayMemeImage'>
-                <img src={meme} alt="Getting Meme's" />
+                <img src={meme.url} alt="Getting Meme's" />
             </div>
         </main>
     )
 }
 
 
-// const date = new Date();
-// date.getHours();
-// function greeting(name) {
-//     const date = new Date().getHours();
-//     let dayTiming;
-//     if (date >= 4 && date < 12) {
-//         dayTiming = 'Good Morning';
-//         console.log(`${dayTiming}, ${name},${date}`)
-//     }
-//     else if (date >= 12 && date < 17) {
-//         dayTiming = 'Good Afternoon';
-//         console.log(`Good ${dayTiming}, ${name},${date}`)
-//     }
-//     else if (date >= 17 && date < 20) {
-//         dayTiming = 'Good Evening';
-//         console.log(`Good ${dayTiming}, ${name},${date}`)
-//     }
-//     else if (date >= 20 && date < 4) {
-//         dayTiming = 'Good Night';
-//         console.log(`Good ${dayTiming}, ${name},${date}`)
-//     }
-// }
-
-// greeting("Bob")
