@@ -1,6 +1,6 @@
 import image from '../assets/image.png'
-import memeData from './memeData';
 import React from 'react';
+// import memeData from './memeData'; //
 
 
 export default function Form() {
@@ -10,34 +10,36 @@ export default function Form() {
         url: 'http://i.imgflip.com/1bij.jpg'
     })
 
-    const [memeImage, SetMemeImage] = React.useState(memeData);
+    // const [memeImage, SetMemeImage] = React.useState(memeData); 
+    const [memeImage, SetMemeImage] = React.useState([]); // instead we are fetching using an API
 
-    function randomMemeImages() {
-        const memeImageArray = memeImage.data.memes;
-        const randomMemeImage = memeImageArray[Math.floor(Math.random() * memeImageArray.length)].url
-        console.log(randomMemeImage)
+    React.useEffect(() => { // api calling
+        fetch("https://api.imgflip.com/get_memes")
+            .then(response => response.json())
+            .then(data => SetMemeImage(data.data.memes));
+    })
+
+    function randomMemeImagesURL() { // to get an random url from the API
+        const randomNumber = Math.floor(Math.random() * memeImage.length)
+        const randomMemeImage = memeImage[randomNumber].url //memeImage is an array => memeImage[3].url
         return randomMemeImage
     }
 
-    function generateMeme() {
-        setMeme(prevMeme => {
+
+    function handleGetMeme(e) {
+        console.log('Clicked')
+        e.preventDefault();
+        setMeme(prevMeme => { //changes the image when clicked using setState
             return (
                 {
                     ...prevMeme,
-                    url: randomMemeImages()
+                    url: randomMemeImagesURL()
                 }
             )
         })
     }
 
-    function handleGetMeme(e) {
-        console.log('Clicked')
-        e.preventDefault();
-        generateMeme()
-
-    }
-
-    function handleClick(event) {
+    function handleUserInput(event) {
         const { name, value } = event.target;
         setMeme(prevMeme => {
             return {
@@ -57,7 +59,7 @@ export default function Form() {
                         className="inputOne"
                         placeholder="Type Here Part One"
                         value={meme.inputOne}
-                        onChange={handleClick}
+                        onChange={handleUserInput}
                     />
 
                     <input type="text"
@@ -65,7 +67,7 @@ export default function Form() {
                         className="inputTwo"
                         placeholder="Type Here Part Two"
                         value={meme.inputTwo}
-                        onChange={handleClick}
+                        onChange={handleUserInput}
 
                     />
                 </div>
