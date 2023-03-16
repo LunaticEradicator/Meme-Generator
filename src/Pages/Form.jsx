@@ -1,6 +1,6 @@
 import image from '../assets/image.png'
 import React from 'react';
-// import memeData from './memeData'; //
+
 
 
 export default function Form() {
@@ -10,18 +10,21 @@ export default function Form() {
         url: 'http://i.imgflip.com/1bij.jpg'
     })
 
-    // const [memeImage, SetMemeImage] = React.useState(memeData); 
-    const [memeImage, SetMemeImage] = React.useState([]); // instead we are fetching using an API
+    const [memeImageUrl, SetMemeImageUrl] = React.useState([]); // instead we are fetching using an API
 
-    React.useEffect(() => { // api calling
-        fetch("https://api.imgflip.com/get_memes")
-            .then(response => response.json())
-            .then(data => SetMemeImage(data.data.memes));
-    })
+    React.useEffect(() => {
+        async function fetchAPI() {
+            const response = await fetch("https://api.imgflip.com/get_memes");
+            const data = await response.json();
+            SetMemeImageUrl(data.data.memes)
+        }
+        fetchAPI();
+    }
+    ), []
 
     function randomMemeImagesURL() { // to get an random url from the API
-        const randomNumber = Math.floor(Math.random() * memeImage.length)
-        const randomMemeImage = memeImage[randomNumber].url //memeImage is an array => memeImage[3].url
+        const randomNumber = Math.floor(Math.random() * memeImageUrl.length)
+        const randomMemeImage = memeImageUrl[randomNumber].url //memeImage is an array => memeImage[3].url
         return randomMemeImage
     }
 
